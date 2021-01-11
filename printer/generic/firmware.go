@@ -2,17 +2,11 @@ package generic
 
 import (
 	"github.com/naueramant/go-3d-printer/printer"
+	"github.com/pkg/errors"
 )
 
-func (p *Printer) GetFirmwareVersionAndCapabilities() (*printer.FirmwareInformation, error) {
-	_, err := p.SendGCode("M115")
-	if err != nil {
-		return nil, err
-	}
-
-	// TODO: parse result
-
-	return &printer.FirmwareInformation{}, nil
+func (p *Printer) GetFirmwareInformation() (info *printer.FirmwareInformation, err error) {
+	return nil, errors.New("Not implemented")
 }
 
 /*

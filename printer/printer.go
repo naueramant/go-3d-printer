@@ -43,7 +43,7 @@ type Printer interface {
 	/*
 		Firmware operations
 	*/
-	GetFirmwareInformation() (info FirmwareInformation, err error)
+	GetFirmwareInformation() (info *FirmwareInformation, err error)
 
 	/*
 		Printer operations
