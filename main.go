@@ -10,7 +10,7 @@ func main() {
 		logrus.Fatal(err)
 	}
 
-	if err := p.SetFanSpeed(0, 0); err != nil {
+	if err := p.MoveRelative(0, 10, 0, 2000); err != nil {
 		logrus.Fatal(err)
 	}
 }

@@ -30,10 +30,10 @@ func (p *Printer) DisableSteppers() (err error) {
 	return nil
 }
 
-func (p *Printer) MoveAbsolute(x, y, z int) (err error) {
+func (p *Printer) MoveAbsolute(x, y, z, rate int) (err error) {
 	if _, err := p.SendGCodes([]string{
 		"G90",
-		fmt.Sprintf("G0 X%d Y%d Z%d", x, y, z),
+		fmt.Sprintf("G0 X%d Y%d Z%d F%d", x, y, z, rate),
 	}); err != nil {
 		return errors.Wrap(err, ErrMoveAbsolute.Error())
 	}
@@ -41,10 +41,10 @@ func (p *Printer) MoveAbsolute(x, y, z int) (err error) {
 	return nil
 }
 
-func (p *Printer) MoveRelative(x, y, z int) (err error) {
+func (p *Printer) MoveRelative(x, y, z, rate int) (err error) {
 	if _, err := p.SendGCodes([]string{
 		"G91",
-		fmt.Sprintf("G0 X%d Y%d Z%d", x, y, z),
+		fmt.Sprintf("G0 X%d Y%d Z%d F%d", x, y, z, rate),
 	}); err != nil {
 		return errors.Wrap(err, ErrMoveRelative.Error())
 	}
@@ -52,8 +52,15 @@ func (p *Printer) MoveRelative(x, y, z int) (err error) {
 	return nil
 }
 
-func (p *Printer) Extrude(extruderIndex, n int) (err error) {
-	return errors.New("Not implemented")
+func (p *Printer) Extrude(amount, rate int) (err error) {
+	if _, err := p.SendGCodes([]string{
+		"G92 E0",
+		fmt.Sprintf("G0 E%d F%d", amount, rate),
+	}); err != nil {
+		return errors.Wrap(err, ErrMoveRelative.Error())
+	}
+
+	return nil
 }
 
 func (p *Printer) AutoHome() (err error) {

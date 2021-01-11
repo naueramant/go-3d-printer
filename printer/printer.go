@@ -14,10 +14,10 @@ type Printer interface {
 	EnableSteppers() (err error)  // OK, generic
 	DisableSteppers() (err error) // OK, generic
 
-	MoveAbsolute(x, y, z int) (err error) // OK, generic
-	MoveRelative(x, y, z int) (err error) // OK, generic
+	MoveAbsolute(x, y, z, rate int) (err error) // OK, generic
+	MoveRelative(x, y, z, rate int) (err error) // OK, generic
 
-	Extrude(extruderIndex, n int) (err error)
+	Extrude(amount, rate int) (err error)
 
 	AutoHome() (err error) // OK, generic
 
