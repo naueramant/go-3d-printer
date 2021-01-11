@@ -6,26 +6,31 @@ type Printer interface {
 	/*
 		Fan operations
 	*/
-	SetFanSpeed(fanIndex, speed int) (err error)
+	SetFanSpeed(fanIndex, speed int) (err error) // OK, generic
 
 	/*
 		Move operations
 	*/
-	EnableSteppers() (err error)
-	DisableSteppers() (err error)
+	EnableSteppers() (err error)  // OK, generic
+	DisableSteppers() (err error) // OK, generic
 
-	MoveAbsolute(x, y, z int) (err error)
-	MoveRelative(x, y, z int) (err error)
+	MoveAbsolute(x, y, z int) (err error) // OK, generic
+	MoveRelative(x, y, z int) (err error) // OK, generic
 
 	Extrude(extruderIndex, n int) (err error)
 
-	AutoHome() (err error)
+	AutoHome() (err error) // OK, generic
 
 	/*
 		Temperature operations
 	*/
 	SetBedTemperature(temperature int) (err error)
 	SetHotendTemperature(temperature int) (err error)
+	GetTemperatures() (temp *Temperature, err error)
+
+	// GetTemperaturesContinuesly returns a channel with temperatures from the
+	// printer every "seconds"
+	GetTemperaturesContinuesly(seconds int) (ch chan *Temperature, stop func(), err error)
 
 	/*
 		File operations

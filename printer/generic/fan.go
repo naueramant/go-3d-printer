@@ -16,7 +16,7 @@ func (p *Printer) SetFanSpeed(fanIndex, speed int) (err error) {
 		return ErrSetFanSpeedValue
 	}
 
-	if _, err := p.SendGCode(fmt.Sprintf("M116 S%d", speed)); err != nil {
+	if _, err := p.SendGCode(fmt.Sprintf("M106 P%d S%d", fanIndex, speed)); err != nil {
 		return errors.Wrap(err, ErrSetFanSpeed.Error())
 	}
 
