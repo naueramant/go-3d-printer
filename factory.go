@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"time"
 
 	printer "github.com/naueramant/go-3d-printer/printer"
 	"github.com/naueramant/go-3d-printer/printer/generic"
@@ -11,6 +12,10 @@ import (
 	"github.com/naueramant/go-3d-printer/printer/smoothie"
 	"github.com/naueramant/go-3d-printer/serial"
 	"github.com/pkg/errors"
+)
+
+var (
+	DetectionTimeout = 1 * time.Second
 )
 
 var (
@@ -24,7 +29,7 @@ func AutoConnect(ctx context.Context) (p printer.Printer, err error) {
 		return nil, err
 	}
 
-	f, err := DetectFirmware(s)
+	f, err := DetectFirmware(ctx, s, DetectionTimeout)
 	if err != nil {
 		return nil, err
 	}
