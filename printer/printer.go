@@ -52,6 +52,6 @@ type Printer interface {
 	*/
 	Disconnect() (err error) // OK, generic
 
-	SendGCode(gcode string) (result string, err error)
-	SendGCodes(gcode []string) (results []string, err error)
+	SendGCode(gcode string) (result string, err error)       // OK, generic
+	SendGCodes(gcode []string) (results []string, err error) // OK, generic
 }
