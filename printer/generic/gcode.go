@@ -7,14 +7,18 @@ import (
 	"github.com/pkg/errors"
 )
 
+var (
+	ErrSendGCode = errors.New("Failed to send GCODE")
+)
+
 func (p *Printer) SendGCode(gcode string) (result string, err error) {
 	if err := p.Connection.WriteString(fmt.Sprintf("%s\n", gcode)); err != nil {
-		return "", errors.Wrap(err, "Failed to send GCODE to Printer")
+		return "", errors.Wrap(err, ErrSendGCode.Error())
 	}
 
 	result, err = p.Connection.ReadString()
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(err, ErrSendGCode.Error())
 	}
 
 	result = strings.ReplaceAll(result, "\r", "")
