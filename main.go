@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/sirupsen/logrus"
 )
@@ -15,8 +14,14 @@ func main() {
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	fmt.Print("mip")
-	time.Sleep(5 * time.Second)
+
+	if err := p.Disconnect(); err != nil {
+		logrus.Fatal(err)
+	}
+
+	if err := p.Disconnect(); err != nil {
+		logrus.Fatal(err)
+	}
 
 	files, err := p.ListFiles()
 	if err != nil {
@@ -26,4 +31,7 @@ func main() {
 	for _, f := range files {
 		fmt.Printf("Path: %s Size: %d\n", f.Path, f.Size)
 	}
+
+	p.SetBedTemperature(0)
+	p.SetHotendTemperature(0, 0)
 }

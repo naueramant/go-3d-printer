@@ -17,26 +17,23 @@ type Printer interface {
 	MoveAbsolute(x, y, z, rate int) (err error) // OK, generic
 	MoveRelative(x, y, z, rate int) (err error) // OK, generic
 
-	Extrude(amount, rate int) (err error)
+	Extrude(amount, rate int) (err error) // OK, generic
 
 	AutoHome() (err error) // OK, generic
 
 	/*
 		Temperature operations
 	*/
-	SetBedTemperature(temperature int) (err error)
-	SetHotendTemperature(temperature int) (err error)
+	SetBedTemperature(temperature int) (err error)                 // OK, generic
+	SetHotendTemperature(hotendIndex, temperature int) (err error) // OK, generic
 	GetTemperatures() (temp *Temperature, err error)
-
-	// GetTemperaturesContinuesly returns a channel with temperatures from the
-	// printer every "seconds"
 	GetTemperaturesContinuesly(seconds int) (ch chan *Temperature, stop func(), err error)
 
 	/*
 		File operations
 	*/
-	ListFiles() (files []*File, err error)
-	DeleteFile(path string) (err error)
+	ListFiles() (files []*File, err error) // OK, generic
+	DeleteFile(path string) (err error)    // OK, generic
 	UploadFile(data io.Reader, path string) (err error)
 
 	/*
@@ -53,7 +50,7 @@ type Printer interface {
 	/*
 		Printer operations
 	*/
-	Disconnect() (err error)
+	Disconnect() (err error) // OK, generic
 
 	SendGCode(gcode string) (result string, err error)
 	SendGCodes(gcode []string) (results []string, err error)
