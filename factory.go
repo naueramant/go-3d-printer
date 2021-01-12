@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	printer "github.com/naueramant/go-3d-printer/printer"
+	"github.com/naueramant/go-3d-printer/printer"
 	"github.com/naueramant/go-3d-printer/printer/generic"
 	"github.com/naueramant/go-3d-printer/printer/marlin"
 	"github.com/naueramant/go-3d-printer/printer/prusa"
@@ -19,7 +19,6 @@ var (
 )
 
 var (
-	ErrInvalidFirmwareEnum  = errors.New("Invalid firmware enum")
 	ErrFirmwareNotSupported = errors.New("Firmware not supported")
 )
 
@@ -38,10 +37,6 @@ func AutoConnect(ctx context.Context) (p printer.Printer, err error) {
 }
 
 func New(ctx context.Context, connection *serial.Connection, firmware Firmware) (p printer.Printer, err error) {
-	if int(firmware) > len(FirmwareNameMap) {
-		return nil, ErrInvalidFirmwareEnum
-	}
-
 	switch firmware {
 	case FirmwareGeneric:
 		return generic.New(ctx, connection), nil

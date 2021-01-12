@@ -21,15 +21,6 @@ const (
 	FirmwarePrusa
 )
 
-var FirmwareNameMap = map[Firmware]string{
-	0: "Generic",
-	1: "Marlin",
-	2: "RepRap",
-	3: "Repetier",
-	4: "Smoothie",
-	5: "Prusa",
-}
-
 var (
 	ErrFailedToDetectFirmware = errors.New("Failed to detect firmware")
 	ErrDetectFirmwareTimeout  = errors.New("Timed outed trying to detect firmware")
