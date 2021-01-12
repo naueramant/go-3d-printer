@@ -54,4 +54,11 @@ type Printer interface {
 
 	SendGCode(gcode string) (result string, err error)       // OK, generic
 	SendGCodes(gcode []string) (results []string, err error) // OK, generic
+
+	/*
+		PSU operation
+	*/
+
+	PowerOff() (err error) // OK, generic
+	PowerOn() (err error)  // OK, generic
 }
