@@ -53,6 +53,8 @@ type Printer interface {
 	/*
 		Printer operations
 	*/
+	Disconnect() (err error)
+
 	SendGCode(gcode string) (result string, err error)
 	SendGCodes(gcode []string) (results []string, err error)
 }

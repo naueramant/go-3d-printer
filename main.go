@@ -1,11 +1,15 @@
 package main
 
 import (
+	"context"
+
 	"github.com/sirupsen/logrus"
 )
 
 func main() {
-	p, err := AutoConnect()
+	ctx := context.Background()
+
+	p, err := AutoConnect(ctx)
 	if err != nil {
 		logrus.Fatal(err)
 	}

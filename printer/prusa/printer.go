@@ -1,24 +1,26 @@
-package generic
+package prusa
 
 import (
 	"context"
 
+	"github.com/naueramant/go-3d-printer/printer/generic"
 	"github.com/naueramant/go-3d-printer/serial"
 )
 
-// Printer can be seen as the most generic implementation of commands for an FDM printer across all firmwares.
+// Printer is the prusa Firmware implementation of the Printer interface.
 type Printer struct {
+	generic.Printer
 	Context    context.Context
 	Connection *serial.Connection
 }
 
 func New(ctx context.Context, connection *serial.Connection) (p *Printer) {
 	return &Printer{
+		Printer: generic.Printer{
+			Context:    ctx,
+			Connection: connection,
+		},
 		Context:    ctx,
 		Connection: connection,
 	}
-}
-
-func (p *Printer) Disconnect() (err error) {
-	return p.Connection.Disconnect()
 }

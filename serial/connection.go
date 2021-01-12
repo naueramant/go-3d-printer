@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/sirupsen/logrus"
 	sp "github.com/tarm/serial"
 )
 
@@ -34,6 +33,10 @@ func NewConnection(device string) (*Connection, error) {
 	}, nil
 }
 
+func (c *Connection) Disconnect() error {
+	return c.Port.Close()
+}
+
 func (c *Connection) Write(data []byte) error {
 	_, err := c.Port.Write(data)
 
@@ -41,7 +44,7 @@ func (c *Connection) Write(data []byte) error {
 }
 
 func (c *Connection) WriteString(data string) error {
-	logrus.WithField("module", "serial").Info("Send:", data)
+	//logrus.WithField("module", "serial").Info("Send:", data)
 
 	return c.Write([]byte(data))
 }
@@ -63,7 +66,7 @@ func (c *Connection) Read() ([]byte, error) {
 		}
 	}
 
-	logrus.WithField("module", "serial").Info("Received:", buf.String())
+	//logrus.WithField("module", "serial").Info("Received:", buf.String())
 
 	return buf.Bytes(), nil
 }
