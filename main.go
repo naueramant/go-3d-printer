@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"github.com/sirupsen/logrus"
 )
@@ -13,8 +15,15 @@ func main() {
 	if err != nil {
 		logrus.Fatal(err)
 	}
+	fmt.Print("mip")
+	time.Sleep(5 * time.Second)
 
-	if err := p.MoveRelative(0, 10, 0, 2000); err != nil {
+	files, err := p.ListFiles()
+	if err != nil {
 		logrus.Fatal(err)
+	}
+
+	for _, f := range files {
+		fmt.Printf("Path: %s Size: %d\n", f.Path, f.Size)
 	}
 }

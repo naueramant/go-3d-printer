@@ -59,6 +59,8 @@ func (c *Connection) Read() ([]byte, error) {
 			return []byte(nil), err
 		}
 
+		data = bytes.Trim(data, "\x00")
+
 		buf.Write(data)
 
 		if strings.Contains(string(data), "ok\n") {

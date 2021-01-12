@@ -35,7 +35,7 @@ type Printer interface {
 	/*
 		File operations
 	*/
-	ListFiles() (files *[]File, err error)
+	ListFiles() (files []*File, err error)
 	DeleteFile(path string) (err error)
 	UploadFile(data io.Reader, path string) (err error)
 

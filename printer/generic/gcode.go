@@ -17,6 +17,8 @@ func (p *Printer) SendGCode(gcode string) (result string, err error) {
 		return "", err
 	}
 
+	result = strings.ReplaceAll(result, "\r", "")
+
 	if strings.Contains(result, "echo:Unknown command:") {
 		return "", errors.Errorf("Unknown command \"%s\"", gcode)
 	}
