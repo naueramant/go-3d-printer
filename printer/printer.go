@@ -71,7 +71,7 @@ type Printer interface {
 	GetFirmwareInformation() (info *FirmwareInformation, err error)
 
 	/*
-		Printer operations
+		Serial operations
 	*/
 
 	// Disconnect from the printer

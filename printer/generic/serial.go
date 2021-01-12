@@ -8,8 +8,24 @@ import (
 )
 
 var (
-	ErrSendGCode = errors.New("Failed to send GCODE")
+	ErrDisconnect = errors.New("Failed to disconnect printer")
+	ErrSendGCode  = errors.New("Failed to send GCode")
 )
+
+func (p *Printer) Disconnect() (err error) {
+	if err := p.Connection.Port.Flush(); err != nil {
+		return errors.Wrap(
+			errors.Wrap(err, "Failed to flush printer connection"),
+			ErrDisconnect.Error(),
+		)
+	}
+
+	if err := p.Connection.Disconnect(); err != nil {
+		return errors.Wrap(err, ErrDisconnect.Error())
+	}
+
+	return nil
+}
 
 func (p *Printer) SendGCode(gcode string) (result string, err error) {
 	if err := p.Connection.WriteString(fmt.Sprintf("%s\n", gcode)); err != nil {
