@@ -3,18 +3,15 @@ package main
 import (
 	"context"
 
+	"github.com/naueramant/go-3d-printer/pkg/factory"
 	"github.com/sirupsen/logrus"
 )
 
 func main() {
-	ctx := context.Background()
+	ctx := context.TODO()
 
-	p, err := AutoConnect(ctx)
+	_, err := factory.Connect(ctx, "/dev/ttyUSB0")
 	if err != nil {
-		logrus.Fatal(err)
-	}
-
-	if err := p.PowerOn(); err != nil {
 		logrus.Fatal(err)
 	}
 }

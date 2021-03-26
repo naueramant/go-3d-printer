@@ -1,13 +1,13 @@
-package main
+package factory
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"time"
 
-	"github.com/naueramant/go-3d-printer/serial"
+	"github.com/naueramant/go-3d-printer/pkg/serial"
 	"github.com/pkg/errors"
-	"golang.org/x/net/context"
 )
 
 type Firmware uint8

@@ -3,7 +3,7 @@ package generic
 import (
 	"context"
 
-	"github.com/naueramant/go-3d-printer/serial"
+	"github.com/naueramant/go-3d-printer/pkg/serial"
 )
 
 // Printer can be seen as the most generic implementation of commands for an FDM printer across all firmwares.

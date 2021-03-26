@@ -60,3 +60,16 @@ func (p *Printer) SendGCodes(gcodes []string) (result []string, err error) {
 
 	return result, nil
 }
+
+// GetChecksum calculates the checksum
+// for a given command.
+//
+// The checksum is calculated by XOR
+// all bytes in the command.
+func GetChecksum(cmd string) (checksum int) {
+	for _, c := range cmd {
+		checksum ^= int(c)
+	}
+
+	return
+}

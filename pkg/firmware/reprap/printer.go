@@ -3,8 +3,8 @@ package reprap
 import (
 	"context"
 
-	"github.com/naueramant/go-3d-printer/printer/generic"
-	"github.com/naueramant/go-3d-printer/serial"
+	"github.com/naueramant/go-3d-printer/pkg/firmware/generic"
+	"github.com/naueramant/go-3d-printer/pkg/serial"
 )
 
 // Printer is the reprap Firmware implementation of the Printer interface.

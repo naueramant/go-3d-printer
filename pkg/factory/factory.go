@@ -1,16 +1,16 @@
-package main
+package factory
 
 import (
 	"context"
 	"time"
 
-	"github.com/naueramant/go-3d-printer/printer"
-	"github.com/naueramant/go-3d-printer/printer/generic"
-	"github.com/naueramant/go-3d-printer/printer/marlin"
-	"github.com/naueramant/go-3d-printer/printer/prusa"
-	"github.com/naueramant/go-3d-printer/printer/reprap"
-	"github.com/naueramant/go-3d-printer/printer/smoothie"
-	"github.com/naueramant/go-3d-printer/serial"
+	"github.com/naueramant/go-3d-printer/pkg/firmware/generic"
+	"github.com/naueramant/go-3d-printer/pkg/firmware/marlin"
+	"github.com/naueramant/go-3d-printer/pkg/firmware/prusa"
+	"github.com/naueramant/go-3d-printer/pkg/firmware/reprap"
+	"github.com/naueramant/go-3d-printer/pkg/firmware/smoothie"
+	"github.com/naueramant/go-3d-printer/pkg/printer"
+	"github.com/naueramant/go-3d-printer/pkg/serial"
 	"github.com/pkg/errors"
 )
 
@@ -23,7 +23,12 @@ var (
 )
 
 func AutoConnect(ctx context.Context) (p printer.Printer, err error) {
-	s, err := serial.NewConnection("/dev/ttyUSB0")
+	// TODO: iterate through devices and try to find a connected printer
+	return nil, errors.New("Not implemented")
+}
+
+func Connect(ctx context.Context, device string) (p printer.Printer, err error) {
+	s, err := serial.NewConnection(device)
 	if err != nil {
 		return nil, err
 	}
