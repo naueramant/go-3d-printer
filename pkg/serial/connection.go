@@ -2,8 +2,6 @@ package serial
 
 import (
 	"bytes"
-	"strings"
-
 	sp "github.com/tarm/serial"
 )
 
@@ -50,7 +48,7 @@ func (c *Connection) WriteString(data string) error {
 }
 
 func (c *Connection) Read() ([]byte, error) {
-	buf := bytes.NewBuffer([]byte(nil))
+	var result []byte
 
 	for {
 		data := make([]byte, 512)
@@ -60,17 +58,14 @@ func (c *Connection) Read() ([]byte, error) {
 		}
 
 		data = bytes.Trim(data, "\x00")
+		result = append(result, data...)
 
-		buf.Write(data)
-
-		if strings.Contains(string(data), "ok\n") {
+		if bytes.Contains(result, []byte("ok\n")) {
 			break
 		}
 	}
 
-	//logrus.WithField("module", "serial").Info("Received:", buf.String())
-
-	return buf.Bytes(), nil
+	return result, nil
 }
 
 func (c *Connection) ReadString() (string, error) {
