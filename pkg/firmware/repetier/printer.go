@@ -10,8 +10,6 @@ import (
 // Printer is the repetier Firmware implementation of the Printer interface.
 type Printer struct {
 	generic.Printer
-	Context    context.Context
-	Connection *serial.Connection
 }
 
 func New(ctx context.Context, connection *serial.Connection) (p *Printer) {
@@ -20,7 +18,5 @@ func New(ctx context.Context, connection *serial.Connection) (p *Printer) {
 			Context:    ctx,
 			Connection: connection,
 		},
-		Context:    ctx,
-		Connection: connection,
 	}
 }

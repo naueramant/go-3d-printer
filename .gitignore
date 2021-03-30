@@ -100,3 +100,8 @@ yarn-error.log*
 *.wav
 *.mp3
 *.wma
+
+# Editor related
+.vscode
+.idea
+.editorconfig
