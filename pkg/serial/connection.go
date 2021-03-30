@@ -7,6 +7,8 @@ import (
 	sp "github.com/tarm/serial"
 )
 
+// TODO: implement io.Reader / io.Writer on connection
+
 type Connection struct {
 	Port   *sp.Port
 	Config *sp.Config
