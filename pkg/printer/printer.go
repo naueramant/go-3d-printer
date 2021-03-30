@@ -46,16 +46,15 @@ type Printer interface {
 	// Set a hotend temperature
 	SetHotendTemperature(hotendIndex, temperature int) (err error) // OK, all
 
-	// TODO: Figure out streaming data etc...
+	// Get temperatures of hotend and bed
 	GetTemperatures() (temp *Temperature, err error)
-	GetTemperaturesContinuesly(seconds int) (ch chan *Temperature, stop func(), err error)
 
 	/*
 		File operations
 	*/
 
 	// List SD Card files
-	ListFiles() (files []*File, err error) // OK, generic
+	ListFiles() (files []File, err error) // OK, generic
 
 	// Delete a file from the SD Card
 	DeleteFile(path string) (err error) // OK, generic

@@ -15,7 +15,7 @@ var (
 	ErrDeleteFile = errors.New("Failed to delete file")
 )
 
-func (p *Printer) ListFiles() (files []*printer.File, err error) {
+func (p *Printer) ListFiles() (files []printer.File, err error) {
 	res, err := p.SendGCode("M20")
 	if err != nil {
 		return nil, errors.Wrap(err, ErrListFiles.Error())
@@ -45,7 +45,7 @@ func (p *Printer) ListFiles() (files []*printer.File, err error) {
 				continue
 			}
 
-			files = append(files, &printer.File{
+			files = append(files, printer.File{
 				Path: r[0],
 				Size: sizeInt,
 			})
