@@ -41,19 +41,19 @@ func Connect(ctx context.Context, device string) (p printer.Printer, err error) 
 	return New(ctx, s, f)
 }
 
-func New(ctx context.Context, connection *serial.Connection, firmware Firmware) (p printer.Printer, err error) {
+func New(ctx context.Context, connection *serial.Connection, firmware printer.FirmwareType) (p printer.Printer, err error) {
 	switch firmware {
-	case FirmwareGeneric:
+	case printer.FirmwareTypeGeneric:
 		return generic.New(ctx, connection), nil
-	case FirmwareMarlin:
+	case printer.FirmwareTypeMarlin:
 		return marlin.New(ctx, connection), nil
-	case FirmwareRepRap:
+	case printer.FirmwareTypeRepRap:
 		return reprap.New(ctx, connection), nil
-	case FirmwareRepetier:
+	case printer.FirmwareTypeRepetier:
 		return reprap.New(ctx, connection), nil
-	case FirmwareSmoothie:
+	case printer.FirmwareTypeSmoothie:
 		return smoothie.New(ctx, connection), nil
-	case FirmwarePrusa:
+	case printer.FirmwareTypePrusa:
 		return prusa.New(ctx, connection), nil
 	}
 

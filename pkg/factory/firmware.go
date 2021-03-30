@@ -6,19 +6,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/naueramant/go-3d-printer/pkg/printer"
 	"github.com/naueramant/go-3d-printer/pkg/serial"
 	"github.com/pkg/errors"
-)
-
-type Firmware uint8
-
-const (
-	FirmwareGeneric = iota
-	FirmwareMarlin
-	FirmwareRepRap
-	FirmwareRepetier
-	FirmwareSmoothie
-	FirmwarePrusa
 )
 
 var (
@@ -27,11 +17,11 @@ var (
 	ErrUnknownFirmware        = errors.New("Unknown firmware")
 )
 
-func DetectFirmware(ctx context.Context, connection *serial.Connection, timeout time.Duration) (firmware Firmware, err error) {
+func DetectFirmware(ctx context.Context, connection *serial.Connection, timeout time.Duration) (firmware printer.FirmwareType, err error) {
 	timedCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	firmwareChan := make(chan Firmware, 1)
+	firmwareChan := make(chan printer.FirmwareType, 1)
 	firmwareErr := make(chan error, 1)
 
 	go func() {
@@ -45,19 +35,19 @@ func DetectFirmware(ctx context.Context, connection *serial.Connection, timeout 
 		}
 
 		if strings.Contains(res, "Marlin") {
-			firmwareChan <- FirmwareMarlin
+			firmwareChan <- printer.FirmwareTypeMarlin
 		}
 		if strings.Contains(res, "RepRap") {
-			firmwareChan <- FirmwareRepRap
+			firmwareChan <- printer.FirmwareTypeRepRap
 		}
 		if strings.Contains(res, "Repetier") {
-			firmwareChan <- FirmwareRepetier
+			firmwareChan <- printer.FirmwareTypeRepetier
 		}
 		if strings.Contains(res, "Smoothie") {
-			firmwareChan <- FirmwareSmoothie
+			firmwareChan <- printer.FirmwareTypeSmoothie
 		}
 		if strings.Contains(res, "Prusa") {
-			firmwareChan <- FirmwarePrusa
+			firmwareChan <- printer.FirmwareTypePrusa
 		}
 
 		firmwareErr <- ErrUnknownFirmware
