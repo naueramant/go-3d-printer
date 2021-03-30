@@ -8,44 +8,45 @@ type Printer interface {
 	*/
 
 	// Set a fan speed
-	SetFanSpeed(fanIndex, speed int) (err error) // OK, generic
+	SetFanSpeed(fanIndex, speed int) (err error) // OK, all
 
 	/*
 		Move operations
 	*/
 
 	// Enable all steppers
-	EnableSteppers() (err error) // OK, generic
+	EnableSteppers() (err error) // OK, all
 
 	// Disable all steppers immediately
-	DisableSteppers() (err error) // OK, generic
+	DisableSteppers() (err error) // OK, all
 
 	// Move to a absolute position defined relative
 	// to the home position
-	MoveAbsolute(x, y, z, rate int, mode MoveMode) (err error) // OK, generic
+	MoveAbsolute(x, y, z, rate int, mode MoveMode) (err error) // OK, all
 
 	// Move relative to the current position
-	MoveRelative(x, y, z, rate int, mode MoveMode) (err error) // OK, generic
+	MoveRelative(x, y, z, rate int, mode MoveMode) (err error) // OK, all
 
 	// Extrude filament
-	Extrude(amount, rate int) (err error) // OK, generic
+	Extrude(amount, rate int) (err error) // OK, all
 
 	// Auto home the printer head
 	AutoHome() (err error) // OK, generic
 
 	// All movement will stop
-	EmergencyStop() (err error)
+	EmergencyStop() (err error) // OK, all
 
 	/*
 		Temperature operations
 	*/
 
 	// Set the print bed temperature
-	SetBedTemperature(temperature int) (err error) // OK, generic
+	SetBedTemperature(temperature int) (err error) // OK, all
 
 	// Set a hotend temperature
-	SetHotendTemperature(hotendIndex, temperature int) (err error) // OK, generic
+	SetHotendTemperature(hotendIndex, temperature int) (err error) // OK, all
 
+	// TODO: Figure out streaming data etc...
 	GetTemperatures() (temp *Temperature, err error)
 	GetTemperaturesContinuesly(seconds int) (ch chan *Temperature, stop func(), err error)
 
@@ -80,7 +81,7 @@ type Printer interface {
 	*/
 
 	// Disconnect from the printer
-	Disconnect() (err error) // OK, generic
+	Disconnect() (err error) // OK, all
 
 	// Send a GCode to the printer and get the result back
 	SendGCode(gcode string) (result string, err error) // OK, generic
@@ -93,8 +94,8 @@ type Printer interface {
 	*/
 
 	// Power on the high voltage PSU
-	PowerOn() (err error) // OK, generic
+	PowerOn() (err error) // OK, all
 
 	// Power off the high voltage PSU
-	PowerOff() (err error) // OK, generic
+	PowerOff() (err error) // OK, all
 }
