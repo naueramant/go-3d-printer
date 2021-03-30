@@ -12,10 +12,10 @@ type Connection struct {
 	Config *sp.Config
 }
 
-func NewConnection(device string) (*Connection, error) {
+func NewConnection(device string, baudrate int) (*Connection, error) {
 	c := &sp.Config{
 		Name: device,
-		Baud: 115200,
+		Baud: baudrate,
 	}
 
 	s, err := sp.OpenPort(c)
@@ -44,8 +44,6 @@ func (c *Connection) Write(data []byte) error {
 }
 
 func (c *Connection) WriteString(data string) error {
-	//logrus.WithField("module", "serial").Info("Send:", data)
-
 	return c.Write([]byte(data))
 }
 
@@ -67,8 +65,6 @@ func (c *Connection) Read() ([]byte, error) {
 			break
 		}
 	}
-
-	//logrus.WithField("module", "serial").Info("Received:", buf.String())
 
 	return buf.Bytes(), nil
 }

@@ -14,8 +14,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-var (
+const (
 	DetectionTimeout = 1 * time.Second
+	DefaultBaudRate  = 115200
 )
 
 var (
@@ -30,7 +31,7 @@ func AutoConnect(ctx context.Context) (p printer.Printer, err error) {
 	}
 
 	for _, d := range devices {
-		p, err := Connect(ctx, d)
+		p, err := Connect(ctx, d, DefaultBaudRate)
 		if err == nil {
 			return p, nil
 		}
@@ -39,8 +40,8 @@ func AutoConnect(ctx context.Context) (p printer.Printer, err error) {
 	return nil, ErrNoPrintersFound
 }
 
-func Connect(ctx context.Context, device string) (p printer.Printer, err error) {
-	s, err := serial.NewConnection(device)
+func Connect(ctx context.Context, device string, baudrate int) (p printer.Printer, err error) {
+	s, err := serial.NewConnection(device, baudrate)
 	if err != nil {
 		return nil, err
 	}
@@ -50,10 +51,10 @@ func Connect(ctx context.Context, device string) (p printer.Printer, err error) 
 		return nil, err
 	}
 
-	return New(ctx, s, f)
+	return newPrinter(ctx, s, f)
 }
 
-func New(ctx context.Context, connection *serial.Connection, firmware printer.FirmwareType) (p printer.Printer, err error) {
+func newPrinter(ctx context.Context, connection *serial.Connection, firmware printer.FirmwareType) (p printer.Printer, err error) {
 	switch firmware {
 	case printer.FirmwareTypeGeneric:
 		return generic.New(ctx, connection), nil
