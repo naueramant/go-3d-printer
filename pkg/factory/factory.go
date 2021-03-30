@@ -20,11 +20,23 @@ var (
 
 var (
 	ErrFirmwareNotSupported = errors.New("Firmware not supported")
+	ErrNoPrintersFound      = errors.New("No printers found")
 )
 
 func AutoConnect(ctx context.Context) (p printer.Printer, err error) {
-	// TODO: iterate through devices and try to find a connected printer
-	return nil, errors.New("Not implemented")
+	devices, err := serial.GetSerialDevices()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, d := range devices {
+		p, err := Connect(ctx, d)
+		if err == nil {
+			return p, nil
+		}
+	}
+
+	return nil, ErrNoPrintersFound
 }
 
 func Connect(ctx context.Context, device string) (p printer.Printer, err error) {
