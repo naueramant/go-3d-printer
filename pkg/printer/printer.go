@@ -22,16 +22,19 @@ type Printer interface {
 
 	// Move to a absolute position defined relative
 	// to the home position
-	MoveAbsolute(x, y, z, rate int) (err error) // OK, generic
+	MoveAbsolute(x, y, z, rate int, mode MoveMode) (err error) // OK, generic
 
 	// Move relative to the current position
-	MoveRelative(x, y, z, rate int) (err error) // OK, generic
+	MoveRelative(x, y, z, rate int, mode MoveMode) (err error) // OK, generic
 
 	// Extrude filament
 	Extrude(amount, rate int) (err error) // OK, generic
 
 	// Auto home the printer head
 	AutoHome() (err error) // OK, generic
+
+	// All movement will stop
+	EmergencyStop() (err error)
 
 	/*
 		Temperature operations
@@ -68,6 +71,8 @@ type Printer interface {
 	/*
 		Firmware operations
 	*/
+
+	// Get firmware information
 	GetFirmwareInformation() (info *FirmwareInformation, err error)
 
 	/*

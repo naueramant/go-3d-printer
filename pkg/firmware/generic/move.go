@@ -3,6 +3,7 @@ package generic
 import (
 	"fmt"
 
+	"github.com/naueramant/go-3d-printer/pkg/printer"
 	"github.com/pkg/errors"
 )
 
@@ -12,6 +13,7 @@ var (
 	ErrMoveAbsolute    = errors.New("Absolute move failed")
 	ErrMoveRelative    = errors.New("Relative move failed")
 	ErrAutoHome        = errors.New("Auto home failed")
+	ErrEmergencyStop   = errors.New("Emergency stop failed")
 )
 
 func (p *Printer) EnableSteppers() (err error) {
@@ -30,10 +32,15 @@ func (p *Printer) DisableSteppers() (err error) {
 	return nil
 }
 
-func (p *Printer) MoveAbsolute(x, y, z, rate int) (err error) {
+func (p *Printer) MoveAbsolute(x, y, z, rate int, mode printer.MoveMode) (err error) {
+	m, err := printer.MoveModeToGCode(mode)
+	if err != nil {
+		return err
+	}
+
 	if _, err := p.SendGCodes([]string{
 		"G90",
-		fmt.Sprintf("G0 X%d Y%d Z%d F%d", x, y, z, rate),
+		fmt.Sprintf("%s X%d Y%d Z%d F%d", m, x, y, z, rate),
 	}); err != nil {
 		return errors.Wrap(err, ErrMoveAbsolute.Error())
 	}
@@ -41,10 +48,15 @@ func (p *Printer) MoveAbsolute(x, y, z, rate int) (err error) {
 	return nil
 }
 
-func (p *Printer) MoveRelative(x, y, z, rate int) (err error) {
+func (p *Printer) MoveRelative(x, y, z, rate int, mode printer.MoveMode) (err error) {
+	m, err := printer.MoveModeToGCode(mode)
+	if err != nil {
+		return err
+	}
+
 	if _, err := p.SendGCodes([]string{
 		"G91",
-		fmt.Sprintf("G0 X%d Y%d Z%d F%d", x, y, z, rate),
+		fmt.Sprintf("%s X%d Y%d Z%d F%d", m, x, y, z, rate),
 	}); err != nil {
 		return errors.Wrap(err, ErrMoveRelative.Error())
 	}
@@ -66,6 +78,14 @@ func (p *Printer) Extrude(amount, rate int) (err error) {
 func (p *Printer) AutoHome() (err error) {
 	if _, err := p.SendGCode("G28"); err != nil {
 		return errors.Wrap(err, ErrAutoHome.Error())
+	}
+
+	return nil
+}
+
+func (p *Printer) EmergencyStop() (err error) {
+	if _, err := p.SendGCode("M112"); err != nil {
+		return errors.Wrap(err, ErrEmergencyStop.Error())
 	}
 
 	return nil
