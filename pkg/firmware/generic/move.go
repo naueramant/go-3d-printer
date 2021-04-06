@@ -65,14 +65,11 @@ func (p *Printer) MoveRelative(x, y, z, rate int, mode printer.MoveMode) (err er
 }
 
 func (p *Printer) Extrude(amount, rate int) (err error) {
-	if _, err := p.SendGCodes([]string{
-		"G92 E0",
-		fmt.Sprintf("G0 E%d F%d", amount, rate),
-	}); err != nil {
-		return errors.Wrap(err, ErrMoveRelative.Error())
-	}
+	return errors.New("Not implemented")
+}
 
-	return nil
+func (p *Printer) Retract(amount, rate int) (err error) {
+	return errors.New("Not implemented")
 }
 
 func (p *Printer) AutoHome() (err error) {
@@ -89,4 +86,10 @@ func (p *Printer) EmergencyStop() (err error) {
 	}
 
 	return nil
+}
+
+func (p *Printer) GetCurrentPosition() (pos *printer.Position, err error) {
+	// TODO: re-evaluate reading of output from printer....
+
+	return nil, errors.New("Not implemented")
 }

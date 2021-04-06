@@ -55,6 +55,17 @@ func (p *Printer) ListFiles() (files []printer.File, err error) {
 	return files, nil
 }
 
+func (p *Printer) GetLongPath(path string) (name string, err error) {
+	// res, err := p.SendGCode(fmt.Sprintf("M33 %s", path))
+	// if err != nil {
+	// 	return "", errors.Wrap(err, ErrListFiles.Error())
+	// }
+
+	// TODO: rework how reading results work...
+
+	return "", errors.New("Not implemented")
+}
+
 func (p *Printer) DeleteFile(path string) (err error) {
 	res, err := p.SendGCode(fmt.Sprintf("M30 %s", path))
 	if err != nil {

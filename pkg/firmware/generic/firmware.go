@@ -6,6 +6,13 @@ import (
 )
 
 func (p *Printer) GetFirmwareInformation() (info *printer.FirmwareInformation, err error) {
+	// res, err := p.SendGCode("M115")
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	// TODO: rework how reading results work...
+
 	return nil, errors.New("Not implemented")
 }
 

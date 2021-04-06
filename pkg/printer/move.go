@@ -6,6 +6,12 @@ var (
 	ErrInvalidMoveMode = errors.New("Invalid move mode only Rapid (G0) and Linear (G1) is allowed")
 )
 
+type Position struct {
+	X float64
+	Y float64
+	Z float64
+}
+
 type MoveMode uint8
 
 const (
