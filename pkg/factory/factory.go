@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	DetectionTimeout = 200 * time.Millisecond
+	DetectionTimeout = 2 * time.Second
 	DefaultBaudRate  = 115200
 )
 
