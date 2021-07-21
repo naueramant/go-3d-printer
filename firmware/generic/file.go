@@ -55,7 +55,7 @@ func (p *Printer) ListFiles() (files []printer.File, err error) {
 	return files, nil
 }
 
-func (p *Printer) GetLongPath(path string) (name string, err error) {
+func (p *Printer) GetFileLongPath(path string) (name string, err error) {
 	// res, err := p.SendGCode(fmt.Sprintf("M33 %s", path))
 	// if err != nil {
 	// 	return "", errors.Wrap(err, ErrListFiles.Error())

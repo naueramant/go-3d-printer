@@ -43,6 +43,6 @@ func (p *Printer) SetHotendTemperature(hotendIndex, temperature int) (err error)
 	return nil
 }
 
-func (p *Printer) GetTemperatures() (temp *printer.Temperature, err error) {
+func (p *Printer) GetTemperatures() (ch <-chan printer.Temperatures, err error) {
 	return nil, errors.New("Not implemented")
 }

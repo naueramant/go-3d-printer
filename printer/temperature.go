@@ -1,3 +1,6 @@
 package printer
 
-type Temperature struct{}
+type Temperatures struct {
+	Head []int
+	Bed  int
+}

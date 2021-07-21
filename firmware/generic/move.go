@@ -88,7 +88,7 @@ func (p *Printer) EmergencyStop() (err error) {
 	return nil
 }
 
-func (p *Printer) GetCurrentPosition() (pos *printer.Position, err error) {
+func (p *Printer) GetPosition() (pos *printer.Position, err error) {
 	// TODO: re-evaluate reading of output from printer....
 
 	return nil, errors.New("Not implemented")

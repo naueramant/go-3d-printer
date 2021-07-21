@@ -42,15 +42,6 @@ func (p *Printer) ResumePrint() (err error) {
 	return nil
 }
 
-func (p *Printer) GetPrintProgress() (stats *printer.PrintProgress, err error) {
-	// res, err := p.SendGCode("M27 S0")
-	// if err != nil {
-	// 	return nil, errors.Wrap(err, ErrPausePrint.Error())
-	// }
-
-	// TODO: rework how reading results work...
-
-	// OUTPUT:
-
+func (p *Printer) GetPrintProgress() (ch <-chan printer.PrintProgress, err error) {
 	return nil, errors.New("Not implemented")
 }

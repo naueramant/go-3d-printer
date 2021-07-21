@@ -4,11 +4,11 @@ import "io"
 
 type Printer interface {
 	/*
-		Fan operations
+		Firmware operations
 	*/
 
-	// Set fan speed
-	SetFanSpeed(fanIndex, speed int) (err error) // OK, generic
+	// Get firmware information
+	GetFirmwareInformation() (info *FirmwareInformation, err error)
 
 	/*
 		Move operations
@@ -40,7 +40,7 @@ type Printer interface {
 	EmergencyStop() (err error) // OK, generic
 
 	// Get current print head position
-	GetCurrentPosition() (pos *Position, err error)
+	GetPosition() (pos *Position, err error)
 
 	/*
 		Temperature operations
@@ -52,8 +52,8 @@ type Printer interface {
 	// Set a hotend temperature
 	SetHotendTemperature(hotendIndex, temperature int) (err error) // OK, generic
 
-	// Get temperatures of hotend and bed
-	GetTemperatures() (temp *Temperature, err error)
+	// Get temperature updates
+	GetTemperatures() (ch <-chan Temperatures, err error)
 
 	/*
 		File operations
@@ -63,7 +63,7 @@ type Printer interface {
 	ListFiles() (files []File, err error) // OK, generic
 
 	// Get the long name for a file based on the DOS 8.3 path
-	GetLongPath(path string) (name string, err error)
+	GetFileLongPath(path string) (name string, err error)
 
 	// Delete a file from the SD Card
 	DeleteFile(path string) (err error) // OK, generic
@@ -84,29 +84,15 @@ type Printer interface {
 	// Resume current print job
 	ResumePrint() (err error)
 
-	// Get current print job status
-	GetPrintProgress() (stats *PrintProgress, err error)
+	// Get streaming print progress
+	GetPrintProgress() (ch <-chan PrintProgress, err error)
 
 	/*
-		Firmware operations
+		Fan operations
 	*/
 
-	// Get firmware information
-	GetFirmwareInformation() (info *FirmwareInformation, err error)
-
-	/*
-		Serial operations
-	*/
-
-	// Disconnect from the printer
-	Disconnect() (err error) // OK, generic
-
-	// Send a GCode to the printer and get the result back
-	SendGCode(gcode string) (result string, err error) // OK, generic
-
-	// TODO: consider removing
-	// Send a Batch of GCodes to the printer and get the results back
-	SendGCodes(gcode []string) (results []string, err error) // OK, generic
+	// Set fan speed
+	SetFanSpeed(fanIndex, speed int) (err error) // OK, generic
 
 	/*
 		PSU operation
@@ -117,4 +103,15 @@ type Printer interface {
 
 	// Power off the high voltage PSU
 	PowerOff() (err error) // OK, generic
+
+	/*
+		Serial operations
+	*/
+
+	// Disconnect from the printer
+	Disconnect() (err error) // OK, generic
+
+	// Send a G-code to the printer and return the result
+	SendGCode(gcode string) (result string, err error) // OK, generic
+
 }
