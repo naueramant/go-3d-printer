@@ -7,26 +7,17 @@ import (
 	"github.com/pkg/errors"
 )
 
-var (
-	ErrEnableSteppers  = errors.New("Enable steppe motors failed")
-	ErrDisableSteppers = errors.New("Disable steppe motors failed")
-	ErrMoveAbsolute    = errors.New("Absolute move failed")
-	ErrMoveRelative    = errors.New("Relative move failed")
-	ErrAutoHome        = errors.New("Auto home failed")
-	ErrEmergencyStop   = errors.New("Emergency stop failed")
-)
-
-func (p *Printer) EnableSteppers() (err error) {
+func (p *Printer) EnableStepperMotors() (err error) {
 	if _, err := p.SendGCode("M17"); err != nil {
-		return errors.Wrap(err, ErrEnableSteppers.Error())
+		return errors.Wrap(err, "Failed to enable stepper motors")
 	}
 
 	return nil
 }
 
-func (p *Printer) DisableSteppers() (err error) {
+func (p *Printer) DisableStepperMotors() (err error) {
 	if _, err := p.SendGCode("M18"); err != nil {
-		return errors.Wrap(err, ErrDisableSteppers.Error())
+		return errors.Wrap(err, "Failed to disable stepper motors")
 	}
 
 	return nil
@@ -42,7 +33,7 @@ func (p *Printer) MoveAbsolute(x, y, z, rate int, mode printer.MoveMode) (err er
 		"G90",
 		fmt.Sprintf("%s X%d Y%d Z%d F%d", m, x, y, z, rate),
 	}); err != nil {
-		return errors.Wrap(err, ErrMoveAbsolute.Error())
+		return errors.Wrap(err, "Failed to move print head absolute")
 	}
 
 	return nil
@@ -58,7 +49,7 @@ func (p *Printer) MoveRelative(x, y, z, rate int, mode printer.MoveMode) (err er
 		"G91",
 		fmt.Sprintf("%s X%d Y%d Z%d F%d", m, x, y, z, rate),
 	}); err != nil {
-		return errors.Wrap(err, ErrMoveRelative.Error())
+		return errors.Wrap(err, "Failed to move print head relative")
 	}
 
 	return nil
@@ -74,7 +65,7 @@ func (p *Printer) Retract(amount, rate int) (err error) {
 
 func (p *Printer) AutoHome() (err error) {
 	if _, err := p.SendGCode("G28"); err != nil {
-		return errors.Wrap(err, ErrAutoHome.Error())
+		return errors.Wrap(err, "Failed to auto home printer")
 	}
 
 	return nil
@@ -82,7 +73,7 @@ func (p *Printer) AutoHome() (err error) {
 
 func (p *Printer) EmergencyStop() (err error) {
 	if _, err := p.SendGCode("M112"); err != nil {
-		return errors.Wrap(err, ErrEmergencyStop.Error())
+		return errors.Wrap(err, "Emergency stop failed")
 	}
 
 	return nil

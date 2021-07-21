@@ -10,15 +10,10 @@ import (
 	"github.com/pkg/errors"
 )
 
-var (
-	ErrListFiles  = errors.New("Failed to list files")
-	ErrDeleteFile = errors.New("Failed to delete file")
-)
-
 func (p *Printer) ListFiles() (files []printer.File, err error) {
 	res, err := p.SendGCode("M20")
 	if err != nil {
-		return nil, errors.Wrap(err, ErrListFiles.Error())
+		return nil, errors.Wrap(err, "Failed to list files")
 	}
 
 	readFileLine := false
@@ -69,11 +64,11 @@ func (p *Printer) GetFileLongPath(path string) (name string, err error) {
 func (p *Printer) DeleteFile(path string) (err error) {
 	res, err := p.SendGCode(fmt.Sprintf("M30 %s", path))
 	if err != nil {
-		return errors.Wrap(err, ErrDeleteFile.Error())
+		return errors.Wrap(err, "Failed to delete file")
 	}
 
 	if strings.Contains(res, "Deletion failed") {
-		return ErrDeleteFile
+		return errors.New("Printer reported that file deletion failed")
 	}
 
 	return nil

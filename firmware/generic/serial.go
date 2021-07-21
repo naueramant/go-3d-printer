@@ -7,21 +7,13 @@ import (
 	"github.com/pkg/errors"
 )
 
-var (
-	ErrDisconnect = errors.New("Failed to disconnect printer")
-	ErrSendGCode  = errors.New("Failed to send GCode")
-)
-
 func (p *Printer) Disconnect() (err error) {
 	if err := p.Connection.Port.Flush(); err != nil {
-		return errors.Wrap(
-			errors.Wrap(err, "Failed to flush printer connection"),
-			ErrDisconnect.Error(),
-		)
+		return errors.Wrap(err, "Failed to flush printer connection")
 	}
 
 	if err := p.Connection.Disconnect(); err != nil {
-		return errors.Wrap(err, ErrDisconnect.Error())
+		return errors.Wrap(err, "Failed to disconnect printer")
 	}
 
 	return nil
@@ -29,12 +21,12 @@ func (p *Printer) Disconnect() (err error) {
 
 func (p *Printer) SendGCode(gcode string) (result string, err error) {
 	if err := p.Connection.WriteString(fmt.Sprintf("%s\n", gcode)); err != nil {
-		return "", errors.Wrap(err, ErrSendGCode.Error())
+		return "", errors.Wrap(err, "Failed to write GCode to printer")
 	}
 
 	result, err = p.Connection.ReadString()
 	if err != nil {
-		return "", errors.Wrap(err, ErrSendGCode.Error())
+		return "", errors.Wrap(err, "Failed to read result from printer")
 	}
 
 	result = strings.ReplaceAll(result, "\r", "")

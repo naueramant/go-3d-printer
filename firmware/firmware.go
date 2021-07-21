@@ -11,12 +11,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-var (
-	ErrFailedToDetectFirmware = errors.New("Failed to detect firmware")
-	ErrDetectFirmwareTimeout  = errors.New("Timed outed trying to detect firmware")
-	ErrUnknownFirmware        = errors.New("Unknown firmware")
-)
-
 func Detect(ctx context.Context, connection *serial.Connection, timeout time.Duration) (firmware printer.FirmwareType, err error) {
 	timedCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
@@ -26,12 +20,12 @@ func Detect(ctx context.Context, connection *serial.Connection, timeout time.Dur
 
 	go func() {
 		if err := connection.WriteString("M115\n"); err != nil {
-			firmwareErr <- errors.Wrap(err, ErrFailedToDetectFirmware.Error())
+			firmwareErr <- errors.Wrap(err, "Failed to request firmware information from printer")
 		}
 
 		res, err := connection.ReadString()
 		if err != nil {
-			firmwareErr <- errors.Wrap(err, ErrFailedToDetectFirmware.Error())
+			firmwareErr <- errors.Wrap(err, "Failed to read firmware information from printer")
 		}
 
 		if strings.Contains(res, "Marlin") {
@@ -50,7 +44,7 @@ func Detect(ctx context.Context, connection *serial.Connection, timeout time.Dur
 			firmwareChan <- printer.FirmwareTypePrusa
 		}
 
-		firmwareErr <- ErrUnknownFirmware
+		firmwareErr <- errors.New("Unsupported firmware")
 	}()
 
 	select {
@@ -60,7 +54,7 @@ func Detect(ctx context.Context, connection *serial.Connection, timeout time.Dur
 				"Printer did not respond after %.f second(s)",
 				timeout.Seconds(),
 			)),
-			ErrDetectFirmwareTimeout.Error(),
+			"Failed to detect firmware",
 		)
 	case f := <-firmwareChan:
 		return f, nil

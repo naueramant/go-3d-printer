@@ -6,18 +6,13 @@ import (
 	"github.com/pkg/errors"
 )
 
-var (
-	ErrSetFanSpeedValue = errors.New("Fan speed needs to be in the range 0-255")
-	ErrSetFanSpeed      = errors.New("Set fan speed failed")
-)
-
 func (p *Printer) SetFanSpeed(fanIndex, speed int) (err error) {
 	if speed < 0 || speed > 255 {
-		return ErrSetFanSpeedValue
+		return errors.New("Print value must be in the range 0-255")
 	}
 
 	if _, err := p.SendGCode(fmt.Sprintf("M106 P%d S%d", fanIndex, speed)); err != nil {
-		return errors.Wrap(err, ErrSetFanSpeed.Error())
+		return errors.Wrap(err, "Failed to set fan speed")
 	}
 
 	return nil

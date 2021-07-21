@@ -7,22 +7,13 @@ import (
 	"github.com/pkg/errors"
 )
 
-var (
-	ErrTemperatureValue     = errors.New("Invalid temperature value")
-	ErrSetBedTemperature    = errors.New("Failed to set bed temperature")
-	ErrSetHotendTemperature = errors.New("Failed to set hotend temperature")
-)
-
 func (p *Printer) SetBedTemperature(temperature int) (err error) {
 	if temperature < 0 {
-		return errors.Wrap(
-			errors.New("Temperature can not be negative"),
-			ErrTemperatureValue.Error(),
-		)
+		return errors.New("Temperature can not be negative")
 	}
 
 	if _, err := p.SendGCode(fmt.Sprintf("M140 S%d", temperature)); err != nil {
-		return errors.Wrap(err, ErrSetBedTemperature.Error())
+		return errors.Wrap(err, "Failed to set bed temperature")
 	}
 
 	return nil
@@ -30,14 +21,11 @@ func (p *Printer) SetBedTemperature(temperature int) (err error) {
 
 func (p *Printer) SetHotendTemperature(hotendIndex, temperature int) (err error) {
 	if temperature < 0 {
-		return errors.Wrap(
-			errors.New("Temperature can not be negative"),
-			ErrTemperatureValue.Error(),
-		)
+		return errors.New("Hotend temperature can not be negative")
 	}
 
 	if _, err := p.SendGCode(fmt.Sprintf("M104 T%d S%d", hotendIndex, temperature)); err != nil {
-		return errors.Wrap(err, ErrSetHotendTemperature.Error())
+		return errors.Wrap(err, "Failed to set hotend temperature")
 	}
 
 	return nil

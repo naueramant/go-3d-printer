@@ -20,11 +20,6 @@ const (
 	DefaultBaudRate  = 115200
 )
 
-var (
-	ErrFirmwareNotSupported = errors.New("Firmware not supported")
-	ErrNoPrintersFound      = errors.New("No printers found")
-)
-
 func AutoConnect(ctx context.Context) (p printer.Printer, err error) {
 	devices, err := serial.GetSerialDevices()
 	if err != nil {
@@ -38,7 +33,7 @@ func AutoConnect(ctx context.Context) (p printer.Printer, err error) {
 		}
 	}
 
-	return nil, ErrNoPrintersFound
+	return nil, errors.New("Not printers found")
 }
 
 func Connect(ctx context.Context, device string, baudrate int) (p printer.Printer, err error) {
@@ -71,5 +66,5 @@ func newPrinter(ctx context.Context, connection *serial.Connection, firmware pri
 		return prusa.New(ctx, connection), nil
 	}
 
-	return nil, ErrFirmwareNotSupported
+	return nil, errors.New("Unknown printer firmware type")
 }

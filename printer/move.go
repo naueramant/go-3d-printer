@@ -2,10 +2,6 @@ package printer
 
 import "errors"
 
-var (
-	ErrInvalidMoveMode = errors.New("Invalid move mode only Rapid (G0) and Linear (G1) is allowed")
-)
-
 type Position struct {
 	X float64
 	Y float64
@@ -26,6 +22,6 @@ func MoveModeToGCode(mode MoveMode) (code string, err error) {
 	case MoveModeLinear:
 		return "G1", nil
 	default:
-		return "", ErrInvalidMoveMode
+		return "", errors.New("Invalid move mode only Rapid (G0) and Linear (G1) is allowed")
 	}
 }

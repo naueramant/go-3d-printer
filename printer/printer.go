@@ -14,11 +14,11 @@ type Printer interface {
 		Move operations
 	*/
 
-	// Enable all steppers
-	EnableSteppers() (err error) // OK, generic
+	// Enable all stepper motors
+	EnableStepperMotors() (err error) // OK, generic
 
-	// Disable all steppers immediately
-	DisableSteppers() (err error) // OK, generic
+	// Disable all stepper motors
+	DisableStepperMotors() (err error) // OK, generic
 
 	// Move to a absolute position defined relative
 	// to the home position
