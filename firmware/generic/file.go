@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/naueramant/go-3d-printer/pkg/printer"
+	"github.com/naueramant/go-3d-printer/printer"
 	"github.com/pkg/errors"
 )
 

@@ -4,13 +4,14 @@ import (
 	"context"
 	"time"
 
-	"github.com/naueramant/go-3d-printer/pkg/firmware/generic"
-	"github.com/naueramant/go-3d-printer/pkg/firmware/marlin"
-	"github.com/naueramant/go-3d-printer/pkg/firmware/prusa"
-	"github.com/naueramant/go-3d-printer/pkg/firmware/reprap"
-	"github.com/naueramant/go-3d-printer/pkg/firmware/smoothie"
-	"github.com/naueramant/go-3d-printer/pkg/printer"
-	"github.com/naueramant/go-3d-printer/pkg/serial"
+	"github.com/naueramant/go-3d-printer/firmware"
+	"github.com/naueramant/go-3d-printer/firmware/generic"
+	"github.com/naueramant/go-3d-printer/firmware/marlin"
+	"github.com/naueramant/go-3d-printer/firmware/prusa"
+	"github.com/naueramant/go-3d-printer/firmware/reprap"
+	"github.com/naueramant/go-3d-printer/firmware/smoothie"
+	"github.com/naueramant/go-3d-printer/printer"
+	"github.com/naueramant/go-3d-printer/serial"
 	"github.com/pkg/errors"
 )
 
@@ -46,7 +47,7 @@ func Connect(ctx context.Context, device string, baudrate int) (p printer.Printe
 		return nil, err
 	}
 
-	f, err := DetectFirmware(ctx, s, DetectionTimeout)
+	f, err := firmware.Detect(ctx, s, DetectionTimeout)
 	if err != nil {
 		return nil, err
 	}

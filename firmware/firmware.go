@@ -1,4 +1,4 @@
-package factory
+package firmware
 
 import (
 	"context"
@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/naueramant/go-3d-printer/pkg/printer"
-	"github.com/naueramant/go-3d-printer/pkg/serial"
+	"github.com/naueramant/go-3d-printer/printer"
+	"github.com/naueramant/go-3d-printer/serial"
 	"github.com/pkg/errors"
 )
 
@@ -17,7 +17,7 @@ var (
 	ErrUnknownFirmware        = errors.New("Unknown firmware")
 )
 
-func DetectFirmware(ctx context.Context, connection *serial.Connection, timeout time.Duration) (firmware printer.FirmwareType, err error) {
+func Detect(ctx context.Context, connection *serial.Connection, timeout time.Duration) (firmware printer.FirmwareType, err error) {
 	timedCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 

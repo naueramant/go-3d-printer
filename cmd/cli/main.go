@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	"github.com/naueramant/go-3d-printer/pkg/factory"
+	factory "github.com/naueramant/go-3d-printer"
 	"github.com/sirupsen/logrus"
 )
 

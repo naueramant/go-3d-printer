@@ -3,12 +3,13 @@ package repetier
 import (
 	"context"
 
-	"github.com/naueramant/go-3d-printer/pkg/firmware/generic"
-	"github.com/naueramant/go-3d-printer/pkg/serial"
+	"github.com/naueramant/go-3d-printer/firmware/generic"
+	"github.com/naueramant/go-3d-printer/serial"
 )
 
 // Printer is the repetier Firmware implementation of the Printer interface.
 type Printer struct {
+	// The generic printer implementation which should not be used directly.
 	generic.Printer
 }
 
