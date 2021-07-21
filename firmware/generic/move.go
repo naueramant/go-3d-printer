@@ -80,7 +80,13 @@ func (p *Printer) EmergencyStop() (err error) {
 }
 
 func (p *Printer) GetPosition() (pos *printer.Position, err error) {
-	// TODO: re-evaluate reading of output from printer....
+	_, err = p.SendGCode("M114")
+	if err != nil {
+		return nil, errors.Wrap(err, "Failed to get position")
+	}
+
+	// Example result from machine
+	// ok C: X:0.00 Y:0.00 Z:0.00 E:0.00
 
 	return nil, errors.New("Not implemented")
 }
