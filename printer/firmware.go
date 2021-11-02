@@ -12,9 +12,12 @@ const (
 )
 
 type FirmwareInformation struct {
-	FirmwareVersion string
+	FirmwareName    string
 	ProtocolVersion string
 	MachineType     string
 	ExtruderCount   int
 	UUID            string
+	Capabilities    Capabilities
 }
+
+type Capabilities map[string]string

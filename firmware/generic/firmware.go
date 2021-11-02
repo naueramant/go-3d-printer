@@ -1,19 +1,69 @@
 package generic
 
 import (
+	"regexp"
+	"strconv"
+	"strings"
+
 	"github.com/naueramant/go-3d-printer/printer"
-	"github.com/pkg/errors"
 )
 
-func (p *Printer) GetFirmwareInformation() (info *printer.FirmwareInformation, err error) {
-	// res, err := p.SendGCode("M115")
-	// if err != nil {
-	// 	return nil, err
-	// }
+func (p *Printer) GetFirmwareInformation() (*printer.FirmwareInformation, error) {
+	res, err := p.SendCommand("M115")
+	if err != nil {
+		return nil, err
+	}
 
-	// TODO: rework how reading results work...
+	r := regexp.MustCompile(`([A-Z\_]+:)|(Cap:[A-Z\_]+:)`)
 
-	return nil, errors.New("Not implemented")
+	cleaned := r.ReplaceAllString(res, "\n${0}")
+	cleaned = strings.Replace(cleaned, "\n\n", "\n", -1)
+
+	spl := strings.Split(cleaned, "\n")
+	spl = spl[:len(spl)-1]
+
+	info := printer.FirmwareInformation{}
+
+	for _, v := range spl {
+		if v == "" || v == "ok\n" {
+			continue
+		}
+
+		if strings.HasPrefix(v, "Cap") {
+			parseCapability(&info, v)
+		} else {
+			parseGeneralInformation(&info, v)
+		}
+	}
+
+	return &info, nil
+}
+
+func parseGeneralInformation(info *printer.FirmwareInformation, s string) {
+	v := strings.SplitN(s, ":", 2)
+
+	switch v[0] {
+	case "FIRMWARE_NAME":
+		info.FirmwareName = v[1]
+	case "EXTRUDER_COUNT":
+		info.ExtruderCount, _ = strconv.Atoi(v[1])
+	case "PROTOCOL_VERSION":
+		info.ProtocolVersion = v[1]
+	case "UUID":
+		info.UUID = v[1]
+	case "MACHINE_TYPE":
+		info.MachineType = v[1]
+	}
+}
+
+func parseCapability(info *printer.FirmwareInformation, s string) {
+	if info.Capabilities == nil {
+		info.Capabilities = make(printer.Capabilities)
+	}
+
+	s = strings.Replace(s, "Cap:", "", 1)
+	v := strings.SplitN(s, ":", 2)
+	info.Capabilities[v[0]] = v[1]
 }
 
 /*

@@ -11,7 +11,7 @@ func (p *Printer) SetFanSpeed(fanIndex, speed int) (err error) {
 		return errors.New("Print value must be in the range 0-255")
 	}
 
-	if _, err := p.SendGCode(fmt.Sprintf("M106 P%d S%d", fanIndex, speed)); err != nil {
+	if _, err := p.SendCommand(fmt.Sprintf("M106 P%d S%d", fanIndex, speed)); err != nil {
 		return errors.Wrap(err, "Failed to set fan speed")
 	}
 

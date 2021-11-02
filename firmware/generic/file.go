@@ -11,7 +11,7 @@ import (
 )
 
 func (p *Printer) ListFiles() (files []printer.File, err error) {
-	res, err := p.SendGCode("M20")
+	res, err := p.SendCommand("M20")
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed to list files")
 	}
@@ -51,7 +51,7 @@ func (p *Printer) ListFiles() (files []printer.File, err error) {
 }
 
 func (p *Printer) GetFileLongPath(path string) (name string, err error) {
-	// res, err := p.SendGCode(fmt.Sprintf("M33 %s", path))
+	// res, err := p.SendCommand(fmt.Sprintf("M33 %s", path))
 	// if err != nil {
 	// 	return "", errors.Wrap(err, ErrListFiles.Error())
 	// }
@@ -62,7 +62,7 @@ func (p *Printer) GetFileLongPath(path string) (name string, err error) {
 }
 
 func (p *Printer) DeleteFile(path string) (err error) {
-	res, err := p.SendGCode(fmt.Sprintf("M30 %s", path))
+	res, err := p.SendCommand(fmt.Sprintf("M30 %s", path))
 	if err != nil {
 		return errors.Wrap(err, "Failed to delete file")
 	}

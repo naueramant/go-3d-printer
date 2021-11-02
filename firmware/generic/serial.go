@@ -19,7 +19,7 @@ func (p *Printer) Disconnect() (err error) {
 	return nil
 }
 
-func (p *Printer) SendGCode(gcode string) (result string, err error) {
+func (p *Printer) SendCommand(gcode string) (result string, err error) {
 	if err := p.Connection.WriteString(fmt.Sprintf("%s\n", gcode)); err != nil {
 		return "", errors.Wrap(err, "Failed to write GCode to printer")
 	}
@@ -38,11 +38,11 @@ func (p *Printer) SendGCode(gcode string) (result string, err error) {
 	return result, nil
 }
 
-func (p *Printer) SendGCodes(gcodes []string) (result []string, err error) {
+func (p *Printer) SendCommands(gcodes []string) (result []string, err error) {
 	result = make([]string, len(gcodes))
 
 	for i, c := range gcodes {
-		r, err := p.SendGCode(c)
+		r, err := p.SendCommand(c)
 		if err != nil {
 			return result, err
 		}

@@ -15,5 +15,12 @@ func main() {
 		logrus.Fatal(err)
 	}
 
-	p.AutoHome()
+	info, err := p.GetFirmwareInformation()
+	if err != nil {
+		logrus.Fatal(err)
+	}
+
+	logrus.Infof("Machine:  %s", info.MachineType)
+	logrus.Infof("Firmware: %s", info.FirmwareName)
+	logrus.Infof("UUID:     %s", info.UUID)
 }

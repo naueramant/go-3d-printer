@@ -12,7 +12,7 @@ func (p *Printer) SetBedTemperature(temperature int) (err error) {
 		return errors.New("Temperature can not be negative")
 	}
 
-	if _, err := p.SendGCode(fmt.Sprintf("M140 S%d", temperature)); err != nil {
+	if _, err := p.SendCommand(fmt.Sprintf("M140 S%d", temperature)); err != nil {
 		return errors.Wrap(err, "Failed to set bed temperature")
 	}
 
@@ -24,7 +24,7 @@ func (p *Printer) SetHotendTemperature(hotendIndex, temperature int) (err error)
 		return errors.New("Hotend temperature can not be negative")
 	}
 
-	if _, err := p.SendGCode(fmt.Sprintf("M104 T%d S%d", hotendIndex, temperature)); err != nil {
+	if _, err := p.SendCommand(fmt.Sprintf("M104 T%d S%d", hotendIndex, temperature)); err != nil {
 		return errors.Wrap(err, "Failed to set hotend temperature")
 	}
 

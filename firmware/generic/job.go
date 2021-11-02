@@ -6,7 +6,7 @@ import (
 )
 
 func (p *Printer) StartPrint(path string) (err error) {
-	// if _, err := p.SendGCodes([]string{
+	// if _, err := p.SendCommands([]string{
 	// 	fmt.Sprintf("M23 %s", path),
 	// 	"M24",
 	// }); err != nil {
@@ -19,7 +19,7 @@ func (p *Printer) StartPrint(path string) (err error) {
 }
 
 func (p *Printer) PausePrint() (err error) {
-	if _, err := p.SendGCode("M25"); err != nil {
+	if _, err := p.SendCommand("M25"); err != nil {
 		return errors.Wrap(err, "Failed to pause print")
 	}
 
@@ -29,7 +29,7 @@ func (p *Printer) PausePrint() (err error) {
 func (p *Printer) ResumePrint() (err error) {
 	// TODO: Check if anything is printing
 
-	if _, err := p.SendGCode("M24"); err != nil {
+	if _, err := p.SendCommand("M24"); err != nil {
 		return errors.Wrap(err, "Failed to resume print")
 	}
 

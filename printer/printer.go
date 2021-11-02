@@ -111,7 +111,6 @@ type Printer interface {
 	// Disconnect from the printer
 	Disconnect() (err error) // OK, generic
 
-	// Send a G-code to the printer and return the result
-	SendGCode(gcode string) (result string, err error) // OK, generic
-
+	// Send a command to the printer and return the result
+	SendCommand(command string) (result string, err error) // OK, generic
 }
