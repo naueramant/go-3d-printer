@@ -18,9 +18,9 @@ func (p *Printer) GetFirmwareInformation() (*printer.FirmwareInformation, error)
 
 	cleaned := r.ReplaceAllString(res, "\n${0}")
 	cleaned = strings.Replace(cleaned, "\n\n", "\n", -1)
+	cleaned = strings.Replace(cleaned, " \n", "\n", -1)
 
 	spl := strings.Split(cleaned, "\n")
-	spl = spl[:len(spl)-1]
 
 	info := printer.FirmwareInformation{}
 
