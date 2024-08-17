@@ -2,6 +2,8 @@ package generic
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/naueramant/go-3d-printer/printer"
 	"github.com/pkg/errors"
@@ -79,14 +81,39 @@ func (p *Printer) EmergencyStop() (err error) {
 	return nil
 }
 
-func (p *Printer) GetPosition() (pos *printer.Position, err error) {
-	_, err = p.SendCommand("M114")
+func (p *Printer) GetPosition() (*printer.Position, error) {
+	res, err := p.SendCommand("M114")
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed to get position")
 	}
 
-	// Example result from machine
-	// ok C: X:0.00 Y:0.00 Z:0.00 E:0.00
+	var pos printer.Position
 
-	return nil, errors.New("Not implemented")
+	parts := strings.Split(res, " ")
+	for _, part := range parts {
+		kv := strings.Split(part, ":")
+
+		if len(kv) != 2 {
+			return nil, errors.New("Invalid position response")
+		}
+
+		key := kv[0]
+		value, err := strconv.ParseFloat(kv[1], 64)
+		if err != nil {
+			return nil, errors.Wrap(err, "Failed to parse position value")
+		}
+
+		switch key {
+		case "X":
+			pos.X = value
+		case "Y":
+			pos.Y = value
+		case "Z":
+			pos.Z = value
+
+			return &pos, nil // Z is the last value
+		}
+	}
+
+	return &pos, nil
 }
