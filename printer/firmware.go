@@ -11,13 +11,14 @@ const (
 	FirmwareTypePrusa
 )
 
+type Capabilities map[string]bool
+
 type FirmwareInformation struct {
 	FirmwareName    string
+	SourceCodeURL   string
 	ProtocolVersion string
 	MachineType     string
 	ExtruderCount   int
 	UUID            string
 	Capabilities    Capabilities
 }
-
-type Capabilities map[string]string

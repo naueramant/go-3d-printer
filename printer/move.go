@@ -11,8 +11,8 @@ type Position struct {
 type MoveMode uint8
 
 const (
-	MoveModeRapid = iota
-	MoveModeLinear
+	MoveModeRapid  MoveMode = 0
+	MoveModeLinear MoveMode = 1
 )
 
 func MoveModeToGCode(mode MoveMode) (code string, err error) {

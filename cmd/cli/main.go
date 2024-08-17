@@ -20,7 +20,10 @@ func main() {
 		logrus.Fatal(err)
 	}
 
-	logrus.Infof("Machine:  %s", info.MachineType)
-	logrus.Infof("Firmware: %s", info.FirmwareName)
+	logrus.Infof("Machine: %s", info.MachineType)
+	logrus.Infof("Firmware Name: %s", info.FirmwareName)
+	logrus.Infof("Source Code URL: %s", info.SourceCodeURL)
+	logrus.Infof("Protocol: %s", info.ProtocolVersion)
+	logrus.Infof("Extruders: %d", info.ExtruderCount)
 	logrus.Infof("UUID:     %s", info.UUID)
 }

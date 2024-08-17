@@ -1,7 +1,7 @@
 package generic
 
 import (
-	"regexp"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -14,81 +14,81 @@ func (p *Printer) GetFirmwareInformation() (*printer.FirmwareInformation, error)
 		return nil, err
 	}
 
-	r := regexp.MustCompile(`([A-Z\_]+:)|(Cap:[A-Z\_]+:)`)
+	lines := strings.Split(res, "\n")
 
-	cleaned := r.ReplaceAllString(res, "\n${0}")
-	cleaned = strings.Replace(cleaned, "\n\n", "\n", -1)
-	cleaned = strings.Replace(cleaned, " \n", "\n", -1)
+	firmwareLine := lines[0]
 
-	spl := strings.Split(cleaned, "\n")
+	info, err := parseFirmwareInfo(firmwareLine)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing firmware information: %w", err)
+	}
 
-	info := printer.FirmwareInformation{}
+	caps, err := parseCapabilities(lines)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing capabilities: %w", err)
+	}
 
-	for _, v := range spl {
-		if v == "" || v == "ok\n" {
+	info.Capabilities = caps
+
+	return info, nil
+}
+
+func parseFirmwareInfo(line string) (*printer.FirmwareInformation, error) {
+	// The firmware information line is always in the format:
+	// FIRMWARE_NAME:XXX SOURCE_CODE_URL:XXX PROTOCOL_VERSION:XXX MACHINE_TYPE:XXX EXTRUDER_COUNT:XXX UUID:XXX
+	// We can therefore assume that values are always in between the field name and the next field name.
+
+	firmwareName := strings.Split(strings.Split(line, "FIRMWARE_NAME:")[1], " SOURCE_CODE_URL:")[0]
+
+	sourceCodeURL := strings.Split(strings.Split(line, "SOURCE_CODE_URL:")[1], " PROTOCOL_VERSION:")[0]
+
+	protocolVersion := strings.Split(strings.Split(line, "PROTOCOL_VERSION:")[1], " MACHINE_TYPE:")[0]
+
+	machineType := strings.Split(strings.Split(line, "MACHINE_TYPE:")[1], " EXTRUDER_COUNT:")[0]
+
+	extruderCountStr := strings.Split(strings.Split(line, "EXTRUDER_COUNT:")[1], " UUID:")[0]
+	extruderCountInt, err := strconv.Atoi(extruderCountStr)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing extruder count: %w", err)
+	}
+
+	// get text after UUID:
+	uuid := strings.Split(line, " UUID:")[1]
+
+	return &printer.FirmwareInformation{
+		FirmwareName:    firmwareName,
+		SourceCodeURL:   sourceCodeURL,
+		ProtocolVersion: protocolVersion,
+		MachineType:     machineType,
+		ExtruderCount:   extruderCountInt,
+		UUID:            uuid,
+	}, nil
+}
+
+func parseCapabilities(lines []string) (printer.Capabilities, error) {
+	capabilities := make(printer.Capabilities)
+
+	for _, line := range lines {
+		if !strings.HasPrefix(line, "Cap:") {
 			continue
 		}
 
-		if strings.HasPrefix(v, "Cap") {
-			parseCapability(&info, v)
-		} else {
-			parseGeneralInformation(&info, v)
+		line = strings.TrimPrefix(line, "Cap:")
+
+		parts := strings.Split(line, ":")
+		if len(parts) != 2 {
+			continue
 		}
+
+		key := parts[0]
+
+		value, err := strconv.ParseBool(parts[1])
+		if err != nil {
+			return nil, fmt.Errorf("error parsing capability value: %w", err)
+		}
+
+		capabilities[key] = value
 	}
 
-	return &info, nil
+	return capabilities, nil
 }
-
-func parseGeneralInformation(info *printer.FirmwareInformation, s string) {
-	v := strings.SplitN(s, ":", 2)
-
-	switch v[0] {
-	case "FIRMWARE_NAME":
-		info.FirmwareName = v[1]
-	case "EXTRUDER_COUNT":
-		info.ExtruderCount, _ = strconv.Atoi(v[1])
-	case "PROTOCOL_VERSION":
-		info.ProtocolVersion = v[1]
-	case "UUID":
-		info.UUID = v[1]
-	case "MACHINE_TYPE":
-		info.MachineType = v[1]
-	}
-}
-
-func parseCapability(info *printer.FirmwareInformation, s string) {
-	if info.Capabilities == nil {
-		info.Capabilities = make(printer.Capabilities)
-	}
-
-	s = strings.Replace(s, "Cap:", "", 1)
-	v := strings.SplitN(s, ":", 2)
-	info.Capabilities[v[0]] = v[1]
-}
-
-/*
-EXAMPLE
-
-FIRMWARE_NAME:Marlin Ver 1.0.1 SOURCE_CODE_URL:https://github.com/MarlinFirmware/Marlin PROTOCOL_VERSION:1.0 MACHINE_TYPE:Ender-3 V2 EXTRUDER_COUNT:1 UUID:cede2a2f-41a2-4748-9b12-c55c62f367ff
-Cap:SERIAL_XON_XOFF:0
-Cap:BINARY_FILE_TRANSFER:0
-Cap:EEPROM:1
-Cap:VOLUMETRIC:1
-Cap:AUTOREPORT_TEMP:1
-Cap:PROGRESS:0
-Cap:PRINT_JOB:1
-Cap:AUTOLEVEL:0
-Cap:Z_PROBE:0
-Cap:LEVELING_DATA:0
-Cap:BUILD_PERCENT:0
-Cap:SOFTWARE_POWER:0
-Cap:TOGGLE_LIGHTS:0
-Cap:CASE_LIGHT_BRIGHTNESS:0
-Cap:EMERGENCY_PARSER:0
-Cap:PROMPT_SUPPORT:0
-Cap:AUTOREPORT_SD_STATUS:0
-Cap:THERMAL_PROTECTION:1
-Cap:MOTION_MODES:0
-Cap:CHAMBER_TEMPERATURE:0
-ok
-*/
